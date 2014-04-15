@@ -12,7 +12,6 @@ def posted(request, post_id):
     context_dict = {}
     context = RequestContext(request,{"all_tags":make_tags()})
     pst = get_object_or_404(Post, pk=post_id)
-    tgs = pst.get_tags()
     comments = Comment.objects.filter(post=pst)
     context_dict["post"] = pst
     context_dict["comments"] = comments
@@ -35,7 +34,7 @@ def tag(request, t):
     context_dict["post_list"] = posts_with_tag 
     return render_to_response('blog/tags.html', context_dict, context)
 
-
+#helper function
 def make_tags():
     posts = Post.objects.all()
     posts = (p.get_tags() for p in posts)
@@ -44,6 +43,7 @@ def make_tags():
     [tag_list.append(c) for c in posts if c not in tag_list]
     return tag_list
 
+#helper function
 def len_comments(post_list):
     for p in post_list:
         p.len_comments = len(Comment.objects.filter(post=p))
