@@ -1,0 +1,45 @@
+
+
+{% extends 'blog/base.html' %}
+{% load url from future %}
+
+
+{% block post_body %}
+{% block tags %}{% endblock %}
+<div class='main'>
+
+<ul>
+   {% for post in post_list %}
+   <div class="title">
+     <h3><a href="{% url 'blog:posted'  post.id  %}">{{ post.title }}</a></h3>
+   </div>
+   <ul>
+     <div class="time">{{ post.created }}</div>
+     <div class="body">{{ post.body|linebreaks }}</div>
+     <div class ="tags">
+       <p> Tags: 
+       {% for tag in post.get_tags %}
+	 <a href="{% url 'blog:taged'  tag  %}">{{ tag }}</a>
+	 {% if not forloop.last %}
+	 |
+	 {% endif %}
+	 
+	   {% endfor %} </p>
+       <p> Comments: {{post.len_comments}} </p>
+       
+
+       
+     </div>
+   </ul>
+   {% empty %}
+   <p> Нет постов </p>
+   {% endfor %}
+</ul>
+
+</div>
+
+
+
+
+
+{% endblock %}

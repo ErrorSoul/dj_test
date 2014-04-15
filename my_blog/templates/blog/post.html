@@ -1,0 +1,51 @@
+{% extends 'blog/base.html' %}
+
+{% block post_body %}
+<div class="title">
+  <h1>{{ post.title }}</h1>
+</div>
+<ul>
+    <div class="time">{{ post.created }}</div>
+    <div class="body">{{ post.body|linebreaks }}</div>
+    <div class ="tags">
+       <p> Tags: 
+       {% for tag in post.get_tags %}
+	 <a href="{% url 'blog:taged'  tag  %}">{{ tag }}</a>
+	 {% if not forloop.last %}
+	 |
+	 {% endif %}
+	   {% endfor %} </p>
+       
+
+
+     </div>
+</ul>
+
+
+<!-- Comments  -->
+{% if comments %}
+    <p>Comments:</p>
+{% endif %}
+
+{% for comment in comments %}
+    <div class="comment">
+        <div class="time">{{ comment.created }} | {{ comment.author }}</div>
+        <div class="body">{{ comment.body|linebreaks }}</div>
+    </div>
+{% endfor %}
+
+<div id="addc">Add a comment</div>
+
+   {% if error %}
+    <p> {{error}}</p>
+  {% endif %}
+<!-- Comment form  -->
+<form action="{% url 'blog:add_comment' post.id %}" method="POST">{% csrf_token %}
+    
+       {{form.as_p}}
+    <div id="submit"><input type="submit" value="Submit"></div>
+</form>
+
+
+
+{% endblock %}
